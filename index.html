@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recetario</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet">
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <!-- CSS Personalizado-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <!-- Conexión Axios-->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+</head>
+<body>
+    <h1 style="font-size: 60px;"">Recetario</h1>
+
+    <!-- Acá se encuentra el Buscador -->
+    <div class="buscador-container">
+        <input type="text" id="buscador" placeholder="Buscar receta...">
+        <i class="fas fa-search"></i> 
+    </div>
+
+    <!-- Acá se encuentra la lista de las recetas -->
+    <div id="recetas">
+        <div class="swiper">
+            <div class="swiper-wrapper">
+                {% for receta in recetas %}
+                <div class="swiper-slide">
+                    <div class="receta-card" onclick="mostrarDetalle({{ receta.id }})">
+                        <div class="receta-tarjeta">
+                            <h3>{{ receta.nombre }}</h3>
+                            <div id="detalle-{{ receta.id }}" class="detalle"></div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        
+            <!-- Paginación -->
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+
+    <!-- Acá se encuentra el botón para agregar una nueva receta-->
+    <div class="agregar-receta-container">
+        <button id="agregar-receta">Agregar receta</button>
+    </div>
+
+    <!-- Acá se encuentra el formulario para una nueva receta -->
+    <div id="modal-form" class="modal">
+        <div class="modal-content">
+            <span class="close" id="close-modal">&times;</span>
+            <h3 style="font-size: 45px;">Nueva Receta</h3>
+            <input type="text" id="nombre" placeholder="Nombre">
+            <select id="categoria">
+                {% for cat in categorias %}
+                <option value="{{ cat.id }}">{{ cat.nombre }}</option>
+                {% endfor %}
+            </select>
+    
+            <h4 style="font-size: 25px;">Ingredientes:</h4>
+            <div id="ingredientes-container" class="ingredientes-container">
+                <div class="ingrediente">
+                    <input type="text" name="ingrediente[]" placeholder="Nombre del ingrediente">
+                    <input type="text" name="cantidad[]" placeholder="Cantidad">
+                    <input type="text" name="unidad[]" placeholder="Unidad (g, ml, tazas, etc.)">
+                </div>
+            </div>
+                <button type="button" id="agregar-ingrediente">Agregar Ingrediente</button>
+                <button onclick="agregarReceta()">Guardar</button>
+                <button type="button" id="cancelar-agregar" class="cancelar-btn">Cancelar</button>
+        </div>
+    </div>
+
+     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+     
+</body>
+</html>
